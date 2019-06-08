@@ -7,34 +7,34 @@ import UIKit
 import Observation
 
 class Person {
-	var name = ""
+    var name = ""
 }
 
 // conformance
 extension Person: Observable {
-	enum ObservationEvent: String, Event {	// alternatively "Observation.Event"
-		case willUpdate
-		case didUpdate
-	}
+    enum ObservationEvent: String, Event {	// alternatively "Observation.Event"
+        case willUpdate
+        case didUpdate
+    }
 }
 
 class ViewController: UIViewController {
-	var person: Person?
-	var token: Token<Person>? // alternatively "Observation.Token<Person>?"
-	
-	func viewDidLoad() {
-		super.viewDidLoad()
+    var person: Person?
+    var token: Token<Person>? // alternatively "Observation.Token<Person>?"
+  
+    func viewDidLoad() {
+        super.viewDidLoad()
 		
-		token = person?.when(.didUpdate) { [weak self] (p) in
-			guard let self = self else { return }
-			self.person = p
-			self.refreshUI()
-		}
-	}
-	
-	func refreshUI() {
-		// do things
-	}
+        token = person?.when(.didUpdate) { [weak self] (p) in
+        guard let self = self else { return }
+        self.person = p
+        self.refreshUI()
+		    }
+    }
+    
+    func refreshUI() {
+        // do things
+    }
 }
 ```
 
