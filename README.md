@@ -1,6 +1,5 @@
 # Observation
 
-## What
 Observation is a simple framework that manages the subscription to and observation of arbitrary events on arbitrary objects, all in a type-safe manner. Simply put, you can define events for a type and subscribe to said events. For example:
 ```swift
 import UIKit
