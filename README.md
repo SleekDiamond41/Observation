@@ -26,10 +26,10 @@ class ViewController: UIViewController {
         super.viewDidLoad()
 		
         token = person?.when(.didUpdate) { [weak self] (p) in
-        guard let self = self else { return }
-        self.person = p
-        self.refreshUI()
-		    }
+            guard let self = self else { return }
+            self.person = p
+            self.refreshUI()
+        }
     }
     
     func refreshUI() {
