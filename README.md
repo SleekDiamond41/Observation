@@ -6,40 +6,38 @@ Observation is a simple framework that manages the subscription to and observati
 import UIKit
 import Observation
 
-class Person {
-    var name = ""
-}
+class Person {}
 
 // conformance
 extension Person: Observable {
-    enum ObservationEvent: String, Event {	// alternatively "Observation.Event"
-        case willUpdate
-        case didUpdate
-    }
+	enum ObservationEvent: String, Event {	// alternatively "Observation.Event"
+		case willUpdate
+		case didUpdate
+	}
 }
 
 class ViewController: UIViewController {
-    var person: Person?
-    var token: Token<Person>? // alternatively "Observation.Token<Person>?"
-  
-    func viewDidLoad() {
-        super.viewDidLoad()
+	var person: Person?
+	var token: Token<Person>? // alternatively "Observation.Token<Person>?"
+	
+	func viewDidLoad() {
+		super.viewDidLoad()
 		
-        token = person?.when(.didUpdate) { [weak self] (p) in
-            guard let self = self else { return }
-            self.person = p
-            self.refreshUI()
-        }
-    }
-    
-    func refreshUI() {
-        // do things
-    }
+		token = person?.when(.didUpdate) { [weak self] (p) in
+			guard let self = self else { return }
+			self.person = p
+			self.refreshUI()
+		}
+	}
+	
+	func refreshUI() {
+		// do things
+	}
 }
 ```
 
 ## Why
-NotificationCenter is a robust and powerful tool, but its API can be more difficult to interact with than beneficial. Observation wraps the convoluted nature of NotificationCenter into a clean, flexible interaction. Observation is not meant to replace NotificationCenter; it is meant to make it easier to use for the majority of use cases.
+NotificationCenter is a robust and powerful tool, but its API can be more difficult to interact with than beneficial. Observation wraps the complexity of NotificationCenter into a clean, flexible interaction. Observation is not meant to replace NotificationCenter; it is meant to make it easier to use for the majority of use cases.
 
 ## How
 Observation is currently backed by NotificationCenter, but that may be subject to change. 
