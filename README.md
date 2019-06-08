@@ -10,7 +10,6 @@ class Person {}
 // conformance
 extension Person: Observable {
   enum ObservationEvent: String, Event {  // alternatively "Observation.Event"
-    case willUpdate
     case didUpdate
   }
 }
@@ -22,15 +21,18 @@ class ViewController: UIViewController {
   func viewDidLoad() {
     super.viewDidLoad()
     
-    token = person?.when(.didUpdate) { [weak self] (p) in
-      guard let self = self else { return }
-      self.person = p
-      self.refreshUI()
+    token = person?.when(.didUpdate) { [weak self] (_) in
+      self?.refreshUI()
     }
   }
   
+  @IBAction func didEnterName(_ field: UITextField) {
+    person?.name = field.text ?? ""
+    person?.post(.didUpdate)
+  }
+  
   func refreshUI() {
-    // do things
+    // ...
   }
 }
 ```
