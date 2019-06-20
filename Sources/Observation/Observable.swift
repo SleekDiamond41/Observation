@@ -31,10 +31,10 @@ extension Observable {
 	/// Posts the event, which will notify any observers.
 	/// - Parameter event: an event to be posted
 	public func post(_ event: ObservationEvent) {
-		post(event, notifier: notifier)
+		post(event, notifier: notifier, queue: queue)
 	}
 	
-	private func post(_ event: ObservationEvent, notifier: NotificationCenter) {
+	private func post(_ event: ObservationEvent, notifier: NotificationCenter, queue: DispatchQueue) {
 		queue.async {
 			let note = Notification(name: Notification.Name(event.observationName), object: self, userInfo: [objectKey: self])
 			notifier.post(note)

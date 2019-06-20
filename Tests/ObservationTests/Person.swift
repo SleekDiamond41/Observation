@@ -15,5 +15,6 @@ extension Person: Observable {
 	
 	enum ObservationEvent: String, Observation.Event {
 		case didRefresh
+		case willBeRemoved
 	}
 }

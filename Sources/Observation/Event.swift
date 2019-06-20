@@ -74,9 +74,3 @@ extension Event where Self: RawRepresentable, Self.RawValue == String {
 	}
 }
 
-struct ObservationEvent: Event {
-	let observationName: String
-	
-	static let willUpdate = ObservationEvent(observationName: "update")
-	static let didUpdate = ObservationEvent(observationName: "update")
-}

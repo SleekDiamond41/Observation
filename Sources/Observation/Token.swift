@@ -9,7 +9,9 @@ import Foundation
 
 
 /// An object that manages observing and performing an action when an event is triggered.
-public class Token<T: Observable> {
+///
+/// - Note: Once a Token has been invalidated it cannot be revalidated; a new one must be generated.
+public class Tokesn<T: Observable> {
 	private var action: (T) -> Void
 	private let notifier: NotificationCenter
 	
@@ -25,8 +27,6 @@ public class Token<T: Observable> {
 	}
 	
 	/// Stop observing events. This happens automatically when a Token is deinitialized.
-	///
-	/// - Note: Once a Token has been invalidated it cannot be revalidated; a new one must be generated.
 	public func invalidate() {
 		notifier.removeObserver(self)
 		action = { _ in }
@@ -34,23 +34,16 @@ public class Token<T: Observable> {
 	
 	@objc private func act(_ note: Notification) {
 		
-		DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-			guard let self = self else { return }
-			
-			self.action(note.userInfo![objectKey] as! T)
-			
-			guard let info = note.userInfo else {
-				return
-			}
-			guard let obj = info[objectKey] else {
-				return
-			}
-			guard let object = obj as? T else {
-				return
-			}
-			
-			self.action(object)
+		guard let info = note.userInfo else {
+			return
 		}
+		guard let obj = info[objectKey] else {
+			return
+		}
+		guard let object = obj as? T else {
+			return
+		}
+		
+		self.action(object)
 	}
-	
 }
