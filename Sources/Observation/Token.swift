@@ -11,7 +11,7 @@ import Foundation
 /// An object that manages observing and performing an action when an event is triggered.
 ///
 /// - Note: Once a Token has been invalidated it cannot be revalidated; a new one must be generated.
-public class Tokesn<T: Observable> {
+public class Token<T: Observable> {
 	private var action: (T) -> Void
 	private let notifier: NotificationCenter
 	
