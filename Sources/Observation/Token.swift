@@ -14,9 +14,10 @@ public class Token<T>: AnyToken where T: Observable {
 	private var notifier: NotificationCenter?
     private var queue: DispatchQueue?
 
-    init(notifier: NotificationCenter, queue: DispatchQueue, object: T, event: T.ObservationEvent, action: @escaping (T) -> Void) {
+    init(notifier: NotificationCenter, queue: DispatchQueue?, object: T, event: T.ObservationEvent, action: @escaping (T) -> Void) {
 		self.action = action
 		self.notifier = notifier
+        self.queue = queue
 		
 		notifier.addObserver(self, selector: #selector(act), name: NSNotification.Name(event.observationName), object: object)
 	}
@@ -31,24 +32,24 @@ public class Token<T>: AnyToken where T: Observable {
         queue = nil
 		action = nil
 	}
-	
+
 	@objc private func act(_ note: Notification) {
         guard let action = action else {
             return
         }
-		
-		queue?.async {
-			guard let info = note.userInfo else {
-				return
-			}
-			guard let obj = info[objectKey] else {
-				return
-			}
-			guard let object = obj as? T else {
-				return
-			}
-			
-			action(object)
-		}
+
+        assert(note.userInfo != nil)
+        assert(note.userInfo?[objectKey] != nil)
+        assert(note.userInfo?[objectKey] is T)
+
+        guard let object = note.userInfo?[objectKey] as? T else {
+            return
+        }
+
+        if let queue = queue {
+            queue.async { action(object) }
+        } else {
+            action(object)
+        }
 	}
 }
