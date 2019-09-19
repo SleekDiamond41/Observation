@@ -26,6 +26,20 @@ final class ObservationTests: XCTestCase {
 		// clean up (not technically necessary in this case, but good practice)
 		token = nil
 	}
+
+    private let iterationCount = 1000
+
+    func testSpeed_PostOffice_CreateTokens() {
+        let person = Person()
+
+        self.measure {
+            for _ in 1...iterationCount {
+                _ = person.when(.didRefresh) { (p) in
+                    print("Do thing")
+                }
+            }
+        }
+    }
 	
 	static var allTests = [
 		("testExample", testExample),
