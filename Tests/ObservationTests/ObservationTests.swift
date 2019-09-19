@@ -4,7 +4,7 @@ import XCTest
 
 final class ObservationTests: XCTestCase {
 	
-	var token: Token<Person>?
+	var token: AnyToken?
 	
 	func testExample() {
 		
