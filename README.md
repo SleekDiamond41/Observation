@@ -5,35 +5,37 @@ Observation is a simple framework that manages the subscription to and observati
 import UIKit
 import Observation
 
-class Person {}
+class Person {
+	var name = ""
+}
 
 // conformance
 extension Person: Observable {
-  enum ObservationEvent: String, Event {  // alternatively "Observation.Event"
-    case didUpdate
-  }
+	enum ObservationEvent: String, Event {  // alternatively "Observation.Event"
+		case didUpdate
+	}
 }
 
 class ViewController: UIViewController {
-  var person: Person?
-  var token: Token<Person>? // alternatively "Observation.Token<Person>?"
+	var person: Person?
+	var token: Token<Person>? // alternatively "Observation.Token<Person>?"
+
+	func viewDidLoad() {
+		super.viewDidLoad()
+
+		token = person?.when(.didUpdate) { [weak self] (_) in
+			self?.refreshUI()
+		}
+	}
   
-  func viewDidLoad() {
-    super.viewDidLoad()
-    
-    token = person?.when(.didUpdate) { [weak self] (_) in
-      self?.refreshUI()
-    }
-  }
+	@IBAction func didEnterName(_ field: UITextField) {
+		person?.name = field.text ?? ""
+		person?.post(.didUpdate)
+	}
   
-  @IBAction func didEnterName(_ field: UITextField) {
-    person?.name = field.text ?? ""
-    person?.post(.didUpdate)
-  }
-  
-  func refreshUI() {
-    // ...
-  }
+	func refreshUI() {
+		// ...
+	}
 }
 ```
 
